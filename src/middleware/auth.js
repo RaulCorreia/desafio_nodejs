@@ -1,9 +1,12 @@
 
+const jwt = require('jsonwebtoken');
+
 // Middleware para verificação de token
 
 exports.verifyJWT = (req, res, next) => {
 
-    var auth = req.headers['Authentication'];
+    console.log(req.headers);
+    var auth = req.headers['authorization'];
     if (!auth) return res.status(401).json({ message: 'No token provided.' });
 
     var token = auth.split(' ');

@@ -12,7 +12,7 @@ const createTable = (conn) => {
         "senha VARCHAR(100) NOT NULL,\n" +
         "cep VARCHAR(9) NOT NULL,\n" +
         "token TEXT NULL,\n" +
-        "last_login TIMESTAMP NULL,\n" +
+        "last_login TIMESTAMP NULL DEFAULT NOW(),\n" +
         "created_at TIMESTAMP NOT NULL DEFAULT NOW(),\n" +
         "updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW()\n" +
         ");";
@@ -28,24 +28,22 @@ const createTable = (conn) => {
 
     conn.query(sqlUser, function (error, results, fields) {
         if (error) return console.log(error);
-        console.log('criou a tabela!');
     });
 
     conn.query(sqlTelefones, function (error, results, fields) {
         if (error) return console.log(error);
-        console.log('criou a tabela!');
     });
 }
 
 // Inserir Usuarios
-const addUserRows = (conn, values, telefones, callback) => {
+const addUserRows = (conn, values, callback) => {
     const sql = "INSERT INTO users (nome, email, senha, cep) VALUES ?";
 
     conn.query(sql, [values], function (error, results, fields) {
 
         if (error) return callback(true, 'Erro ao salvar usuario');
 
-        return addTelRows(conn, results.insertId, telefones, callback);
+        return callback(false, results.insertId);
     });
 
 }
@@ -58,12 +56,12 @@ const addTelRows = async (conn, id, telefones, callback) => {
 
         if (error) return callback(true, 'Erro ao salvar telefones');
 
-        return callback(false, 'Usuario criado com sucesso!');
+        return callback(false, results);
     });
 }
 
 // Inserir telefones de usuarios
-const selectRow = async (conn, table, columns = '*', condition, limit = 100, callback) => {
+const selectRow = async (conn, table, condition, callback, columns = '*', limit = 100) => {
 
     const sql = `SELECT ${columns} from ${table} WHERE ${condition} LIMIT ${limit}`;
 
@@ -79,8 +77,19 @@ const selectRow = async (conn, table, columns = '*', condition, limit = 100, cal
 
 }
 
+const executeQuery = (conn, sql, callback) => {
+
+    conn.query(sql, (error, results, fields) => {
+
+        if (error) return callback(true, 'Erro ao obter usuario');
+
+        return callback(false, results);
+    });
+}
+
 
 module.exports.createTable = createTable;
 module.exports.addUserRows = addUserRows;
 module.exports.addTelRows = addTelRows;
 module.exports.selectRow = selectRow;
+module.exports.executeQuery = executeQuery;
