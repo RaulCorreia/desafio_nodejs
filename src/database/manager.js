@@ -65,7 +65,10 @@ const executeQuery = (conn, sql, callback) => {
 
     conn.query(sql, (error, results, fields) => {
 
-        if (error) return callback(true, 'Erro inesperado');
+        if (error) {
+            console.log(error);
+            return callback(true, 'Erro inesperado');
+        }
 
         return callback(false, results);
     });

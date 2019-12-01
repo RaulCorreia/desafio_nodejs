@@ -9,8 +9,6 @@ const { registerValidation, loginValidation } = require('../util/validation');
 
 exports.register = async (req, res) => {
 
-    console.log('REGISTER');
-
     // Validação dos dados
     const { error } = registerValidation(req.body);
     if (error) return res.status(400).json({ mensagem: error.details[0].message });
