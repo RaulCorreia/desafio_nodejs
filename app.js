@@ -4,13 +4,13 @@ require('dotenv').config();
 
 const bodyParser = require('body-parser');
 const mysqlConnection = require('./src/database/index');
-
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api', require('./src/routes'));
 
-app.listen(3000, function () {
-    console.log('App listening on port 3000!');
+app.listen(port, function () {
+    console.log(`App listening on port ${port}!`);
 });

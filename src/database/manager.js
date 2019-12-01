@@ -12,9 +12,9 @@ const createTable = (conn) => {
         "senha VARCHAR(100) NOT NULL,\n" +
         "cep VARCHAR(9) NOT NULL,\n" +
         "token TEXT NULL,\n" +
-        "last_login TIMESTAMP NULL DEFAULT NOW(),\n" +
-        "created_at TIMESTAMP NOT NULL DEFAULT NOW(),\n" +
-        "updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW()\n" +
+        "ultimo_login TIMESTAMP NULL DEFAULT NOW(),\n" +
+        "data_criacao TIMESTAMP NOT NULL DEFAULT NOW(),\n" +
+        "data_atualizacao TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW()\n" +
         ");";
 
     const sqlTelefones = "CREATE TABLE IF NOT EXISTS telefones (\n" +
@@ -60,28 +60,12 @@ const addTelRows = async (conn, id, telefones, callback) => {
     });
 }
 
-// Inserir telefones de usuarios
-const selectRow = async (conn, table, condition, callback, columns = '*', limit = 100) => {
-
-    const sql = `SELECT ${columns} from ${table} WHERE ${condition} LIMIT ${limit}`;
-
-    conn.query(sql, (error, results, fields) => {
-
-        if (error) return callback(true, 'Erro ao verificar email');
-
-        if (results.length)
-            return callback(true, 'O Email ja esta sendo utilizado');
-        else
-            return callback(false, results);
-    });
-
-}
 
 const executeQuery = (conn, sql, callback) => {
 
     conn.query(sql, (error, results, fields) => {
 
-        if (error) return callback(true, 'Erro ao obter usuario');
+        if (error) return callback(true, 'Erro inesperado');
 
         return callback(false, results);
     });
@@ -91,5 +75,4 @@ const executeQuery = (conn, sql, callback) => {
 module.exports.createTable = createTable;
 module.exports.addUserRows = addUserRows;
 module.exports.addTelRows = addTelRows;
-module.exports.selectRow = selectRow;
 module.exports.executeQuery = executeQuery;
