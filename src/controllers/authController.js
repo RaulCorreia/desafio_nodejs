@@ -1,5 +1,3 @@
-const User = require('../models/user');
-const Telefone = require('../models/telefone');
 const jwt = require('jsonwebtoken');
 const mysqlConnection = require('../database/index');
 const { addUserRows, addTelRows, executeQuery } = require('../database/manager');
